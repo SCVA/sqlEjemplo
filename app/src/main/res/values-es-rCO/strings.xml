@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">sqlEjemplo</string>
+    <string name="passwordText">Ingrese su password</string>
+    <string name="userText">Usuario</string>
+    <string name="btnSaveText">Guardar</string>
+</resources>
