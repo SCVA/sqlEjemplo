@@ -1,5 +1,7 @@
 package sebastian.sqlejemplo;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.database.Cursor;
@@ -7,7 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import sebastian.sqlejemplo.data.AgendaDBHelper;
 import sebastian.sqlejemplo.data.Usuario;
@@ -15,6 +24,7 @@ import sebastian.sqlejemplo.data.Usuario;
 public class MainActivity extends AppCompatActivity {
 
     AgendaDBHelper dbAyudante;
+    UsuarioAdapater usuarioAdaptador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +33,17 @@ public class MainActivity extends AppCompatActivity {
         Button btnGuardar = (Button) findViewById( R.id.btnGuardar );
         EditText nombreTxt = (EditText) findViewById( R.id.usrText );
         EditText passwordTxt = (EditText) findViewById( R.id.passwordText );
+        ListView milista = (ListView) findViewById( R.id.listaUsuarios );
+
+        ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
+        Usuario usuarioPrueba = new Usuario( "Pepito" ,1122);
+        listaUsuarios.add(usuarioPrueba);
+
+        usuarioAdaptador = new UsuarioAdapater(
+                this,
+                listaUsuarios
+        );
+        milista.setAdapter( usuarioAdaptador );
 
         dbAyudante = new AgendaDBHelper(this);
 
@@ -31,10 +52,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Usuario usuarioNuevo = new Usuario( nombreTxt.getText().toString(),Integer.parseInt(passwordTxt.getText().toString()) );
                 dbAyudante.guardarUsuario( usuarioNuevo );
-                Cursor cursorPersonaAlmacenada = dbAyudante.getUsuarioById("2");
-                cursorPersonaAlmacenada.moveToFirst();
-                Usuario usuarioAlmacenado = new Usuario(cursorPersonaAlmacenada);
-                Toast.makeText(v.getContext(),usuarioAlmacenado.getName(), Toast.LENGTH_LONG).show();
             }
         } );
     }
