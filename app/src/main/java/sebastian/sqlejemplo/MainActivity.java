@@ -3,8 +3,10 @@ package sebastian.sqlejemplo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +26,8 @@ import sebastian.sqlejemplo.data.Usuario;
 public class MainActivity extends AppCompatActivity {
 
     AgendaDBHelper dbAyudante;
-    UsuarioAdapater usuarioAdaptador;
+    //UsuarioAdapater usuarioAdaptador;
+    UsuarioCursorAdapter usuarioAdaptador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,26 +37,54 @@ public class MainActivity extends AppCompatActivity {
         EditText nombreTxt = (EditText) findViewById( R.id.usrText );
         EditText passwordTxt = (EditText) findViewById( R.id.passwordText );
         ListView milista = (ListView) findViewById( R.id.listaUsuarios );
-
+        //RecyclerView milista = (RecyclerView) findViewById( R.id.recyclerListusuarios );
+        dbAyudante = new AgendaDBHelper(this);
+        /*
+        Cursor cursorTodosUsuarios = dbAyudante.getAllUsuarios();
         ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
-        Usuario usuarioPrueba = new Usuario( "Pepito" ,1122);
-        listaUsuarios.add(usuarioPrueba);
-
+        while (cursorTodosUsuarios.moveToNext()){
+            listaUsuarios.add( new Usuario( cursorTodosUsuarios ) );
+        }
         usuarioAdaptador = new UsuarioAdapater(
                 this,
                 listaUsuarios
         );
-        milista.setAdapter( usuarioAdaptador );
+         */
+        usuarioAdaptador = new UsuarioCursorAdapter( this, null);
 
-        dbAyudante = new AgendaDBHelper(this);
+        milista.setAdapter( usuarioAdaptador );
 
         btnGuardar.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Usuario usuarioNuevo = new Usuario( nombreTxt.getText().toString(),Integer.parseInt(passwordTxt.getText().toString()) );
                 dbAyudante.guardarUsuario( usuarioNuevo );
+                loadPersonas();
             }
         } );
+
+        loadPersonas();
+
     }
 
+    private void loadPersonas() {
+        new PersonaLoaderTask().execute( );
+    }
+
+    private class PersonaLoaderTask extends AsyncTask<Void, Void, Cursor> {
+
+        @Override
+        protected Cursor doInBackground(Void... voids) {
+            return dbAyudante.getAllUsuarios();
+        }
+
+        @Override
+        protected void onPostExecute(Cursor cursor) {
+            if (cursor != null && cursor.getCount() > 0) {
+                usuarioAdaptador.swapCursor( cursor );
+            } else {
+                // Mostrar empty state
+            }
+        }
+    }
 }
