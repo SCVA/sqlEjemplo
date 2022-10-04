@@ -3,13 +3,17 @@ package sebastian.sqlejemplo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
+        //setContentView( R.layout.activity_main_v2 );
         Button btnGuardar = (Button) findViewById( R.id.btnGuardar );
         EditText nombreTxt = (EditText) findViewById( R.id.usrText );
         EditText passwordTxt = (EditText) findViewById( R.id.passwordText );
@@ -51,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         );
          */
         usuarioAdaptador = new UsuarioCursorAdapter( this, null);
-
         milista.setAdapter( usuarioAdaptador );
 
         btnGuardar.setOnClickListener( new View.OnClickListener() {
@@ -82,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Cursor cursor) {
             if (cursor != null && cursor.getCount() > 0) {
                 usuarioAdaptador.swapCursor( cursor );
-            } else {
-                // Mostrar empty state
             }
         }
     }

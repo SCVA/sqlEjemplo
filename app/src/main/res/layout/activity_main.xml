@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,12 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:autofillHints=""
         android:ems="10"
         android:gravity="center"
+        android:hint="@string/userText"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="@string/userText"
-        android:autofillHints="" />
+        android:text="@string/userText" />
 
     <EditText
         android:id="@+id/passwordText"
@@ -43,6 +43,7 @@
     <ListView
         android:id="@+id/listaUsuarios"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:listitem="@layout/list_item_usuarios" />
 
 </LinearLayout>

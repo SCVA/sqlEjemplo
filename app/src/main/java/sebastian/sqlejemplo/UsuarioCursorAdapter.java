@@ -1,5 +1,6 @@
 package sebastian.sqlejemplo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -22,13 +23,15 @@ public class UsuarioCursorAdapter extends CursorAdapter {
         return inflater.inflate(R.layout.list_item_usuarios, parent, false);
     }
 
+
+
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView nameList = (TextView) view.findViewById( R.id.listNamePassword );
         TextView passwordList = (TextView) view.findViewById( R.id.listPasswordUser );
 
-        String name = cursor.getString(cursor.getColumnIndex( UsuarioContract.UsuarioEntry.NAME));
-        Integer password = cursor.getInt(cursor.getColumnIndex( UsuarioContract.UsuarioEntry.PASSWORD ) );
+        @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex( UsuarioContract.UsuarioEntry.NAME));
+        @SuppressLint("Range") Integer password = cursor.getInt(cursor.getColumnIndex( UsuarioContract.UsuarioEntry.PASSWORD ) );
 
         nameList.setText( name );
         passwordList.setText( password.toString() );
