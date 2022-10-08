@@ -1,13 +1,13 @@
 package sebastian.sqlejemplo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,8 +71,9 @@ public class MainActivity extends AppCompatActivity implements UsuarioRecyclerAd
     }
 
     @Override
-    public void onClick(UsuarioRecyclerAdaptador.ViewHolder view) {
-
+    public void onClick(UsuarioRecyclerAdaptador.ViewHolder view, Usuario usuarioActualizado) {
+        dbAyudante.actualizarUsuario(usuarioActualizado,usuarioActualizado.getName());
+        loadPersonas();
     }
 
     private class PersonaLoaderTask extends AsyncTask<Void, Void, Cursor> {

@@ -21,7 +21,7 @@ public class UsuarioRecyclerAdaptador extends RecyclerView.Adapter<UsuarioRecycl
     }
 
     interface OnItemClickListener{
-        public void onClick(ViewHolder view);
+        public void onClick(ViewHolder view, Usuario usuarioactualizado);
     }
 
     @NonNull
@@ -67,8 +67,19 @@ public class UsuarioRecyclerAdaptador extends RecyclerView.Adapter<UsuarioRecycl
 
         @Override
         public void onClick(View v) {
-
+            Usuario usarioActualizado = obtenerUsuario( getAdapterPosition() );
+            usarioActualizado.setPassword( 0000 );
+            listenerClick.onClick( this,usarioActualizado );
         }
+    }
+
+    private Usuario obtenerUsuario(int posicion){
+        if (cursorListaUsuarios!=null){
+            cursorListaUsuarios.moveToPosition( posicion );
+            Usuario nuevoUsuario = new Usuario( cursorListaUsuarios );
+            return nuevoUsuario;
+        }
+        return null;
     }
 
 }

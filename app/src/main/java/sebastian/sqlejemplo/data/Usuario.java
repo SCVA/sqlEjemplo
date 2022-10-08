@@ -36,4 +36,8 @@ public class Usuario {
     public Integer getPassword() {
         return password;
     }
+
+    public void setPassword(Integer password) {
+        this.password = password;
+    }
 }
