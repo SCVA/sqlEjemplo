@@ -1,48 +1,38 @@
 package sebastian.sqlejemplo;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import sebastian.sqlejemplo.data.AgendaDBHelper;
 import sebastian.sqlejemplo.data.Usuario;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UsuarioRecyclerAdaptador.OnItemClickListener{
 
-    AgendaDBHelper dbAyudante;
+    private AgendaDBHelper dbAyudante;
     //UsuarioAdapater usuarioAdaptador;
-    UsuarioCursorAdapter usuarioAdaptador;
+    //UsuarioCursorAdapter usuarioAdaptador;
+    private UsuarioRecyclerAdaptador usuarioAdaptador;
+    private LinearLayoutManager linearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_main );
-        //setContentView( R.layout.activity_main_v2 );
+        //setContentView( R.layout.activity_main );
+        setContentView( R.layout.activity_main_v2 );
         Button btnGuardar = (Button) findViewById( R.id.btnGuardar );
         EditText nombreTxt = (EditText) findViewById( R.id.usrText );
         EditText passwordTxt = (EditText) findViewById( R.id.passwordText );
-        ListView milista = (ListView) findViewById( R.id.listaUsuarios );
-        //RecyclerView milista = (RecyclerView) findViewById( R.id.recyclerListusuarios );
+        //ListView milista = (ListView) findViewById( R.id.listaUsuarios );
+        RecyclerView milista = (RecyclerView) findViewById( R.id.recyclerListusuarios );
         dbAyudante = new AgendaDBHelper(this);
         /*
         Cursor cursorTodosUsuarios = dbAyudante.getAllUsuarios();
@@ -55,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
                 listaUsuarios
         );
          */
-        usuarioAdaptador = new UsuarioCursorAdapter( this, null);
+        //usuarioAdaptador = new UsuarioCursorAdapter( this, null);
+        milista.setHasFixedSize( true );
+        linearLayoutManager = new LinearLayoutManager( this );
+        milista.setLayoutManager( linearLayoutManager );
+        usuarioAdaptador = new UsuarioRecyclerAdaptador( this );
         milista.setAdapter( usuarioAdaptador );
 
         btnGuardar.setOnClickListener( new View.OnClickListener() {
@@ -71,8 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void loadPersonas() {
         new PersonaLoaderTask().execute( );
+    }
+
+    @Override
+    public void onClick(UsuarioRecyclerAdaptador.ViewHolder view) {
+
     }
 
     private class PersonaLoaderTask extends AsyncTask<Void, Void, Cursor> {
